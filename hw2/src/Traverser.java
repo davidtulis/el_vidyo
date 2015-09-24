@@ -4,13 +4,13 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * Created by david on 8/26/15.
  */
 public class Traverser extends Entity {
 
-    private Rectangle hitBox;
     private Texture texture;
 
     private float imageWidth;
@@ -33,9 +33,9 @@ public class Traverser extends Entity {
             imageWidthPX = width;
             imageHeightPX = width * texture.getImageHeight() / texture.getImageWidth();
 
-            hitBox = new Rectangle(0, 0, width, (width * texture.getImageHeight() / texture.getImageWidth()));
+            //hitbox = new Rectangle(0, 0, width, (width * texture.getImageHeight() / texture.getImageWidth()));
         }
-        catch (java.io.IOException e)
+        catch (IOException e)
         {
             e.printStackTrace();
             System.err.println("cannot open resource");
@@ -54,12 +54,14 @@ public class Traverser extends Entity {
 
     public void update(float delta)
     {
-        double xx = hitBox.getX();
-        double yy = hitBox.getY();
+        double xx = hitbox.getX();
+        double yy = hitbox.getY();
+        //System.out.println(xx);
+        System.out.println(yy);
 
         if (direction == 'r')
         {
-            hitBox.setLocation((int)(xx+delta), (int)yy);
+            hitbox.setLocation((int)(xx+delta), (int)yy);
             if (x>800-imageWidthPX)
             {
                 direction = 'u';
@@ -67,7 +69,7 @@ public class Traverser extends Entity {
         }
         else if (direction == 'l')
         {
-            hitBox.setLocation((int)(xx-delta), (int)yy);
+            hitbox.setLocation((int)(xx-delta), (int)yy);
             if (x<0)
             {
                 direction = 'd';
@@ -75,7 +77,7 @@ public class Traverser extends Entity {
         }
         else if (direction == 'd')
         {
-            hitBox.setLocation((int)xx, (int)(yy+delta));
+            hitbox.setLocation((int)xx, (int)(yy+delta));
             if (y>600-imageHeightPX)
             {
                 direction = 'r';
@@ -83,7 +85,7 @@ public class Traverser extends Entity {
         }
         else if (direction=='u')
         {
-            hitBox.setLocation((int)xx, (int)(yy-delta));
+            hitbox.setLocation((int)xx, (int)(yy-delta));
             if (y<0)
             {
                 direction = 'l';
@@ -91,12 +93,16 @@ public class Traverser extends Entity {
         }
     }
 
-    public void draw()
+    public void onCollision(Entity other) {
+        System.out.println("The mouse has been hit");
+    }
+
+        public void draw()
     {
-        x = (float) hitBox.getX();
-        y = (float) hitBox.getY();
-        float w = (float) hitBox.getWidth();
-        float h = (float) hitBox.getHeight();
+        x = (float) hitbox.getX();
+        y = (float) hitbox.getY();
+        float w = (float) hitbox.getWidth();
+        float h = (float) hitbox.getHeight();
 
         GL11.glColor3f(1,1,1);
 

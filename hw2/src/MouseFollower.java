@@ -7,30 +7,37 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 import java.awt.*;
+import java.util.LinkedList;
 
 /**
  * Created by david on 8/26/15.
  */
 public class MouseFollower extends Entity {
 
-    private Rectangle hitBox;
     private Texture texture;
+    private LinkedList<Projectile> projectiles;
+    private int projectileDirection;
+
 
     float x=100;
     float y=200;
     private float imageWidth;
     private float imageHeight;
 
-    public MouseFollower(int width, String imgpath)
+
+
+    public MouseFollower(int width, String imgpath, LinkedList<Projectile> projectiles)
     {
+        super(0,0,100,100);
+        this.projectiles = projectiles;
+        this.projectileDirection = 1;
+
         try
         {
             texture = TextureLoader.getTexture("jpg", ResourceLoader.getResourceAsStream(imgpath));
             imageWidth = (float)texture.getImageWidth() / texture.getTextureWidth();
             imageHeight = (float)texture.getImageHeight() / texture.getTextureHeight();
 
-
-            hitBox = new Rectangle(0, 0, width, (width * texture.getImageHeight() / texture.getImageWidth()));
         }
         catch (java.io.IOException e)
         {
@@ -51,8 +58,8 @@ public class MouseFollower extends Entity {
 
     public void update(float delta)
     {
-        double xx = hitBox.getX();
-        double yy = hitBox.getY();
+        double xx = hitbox.getX();
+        double yy = hitbox.getY();
 
         if (Mouse.isButtonDown(0)){
             int mx = Mouse.getX();
@@ -61,27 +68,33 @@ public class MouseFollower extends Entity {
             x+=(mx-x)*0.1*delta;
             y+=(my-y)*0.1*delta;
 
-            hitBox.setLocation((int)x, (int)y);
+            hitbox.setLocation((int)x, (int)y);
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
         {
-            hitBox.setLocation((int) (xx + (delta / 2)), (int) yy);
+            x+=delta/2;
+            hitbox.setLocation((int) (xx + (delta / 2)), (int) yy);
+            projectileDirection=1;
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
         {
-            hitBox.setLocation((int) (xx - (delta / 2)), (int) yy);
+            x-=delta/2;
+            hitbox.setLocation((int) (xx - (delta / 2)), (int) yy);
+            projectileDirection=-1;
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_UP))
         {
-            hitBox.setLocation((int) xx, (int) (yy - (delta / 2)));
+            y-=delta/2;
+            hitbox.setLocation((int) xx, (int) (yy - (delta / 2)));
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
         {
-            hitBox.setLocation((int)xx, (int)(yy+(delta/2)));
+            y+=delta/2;
+            hitbox.setLocation((int)xx, (int)(yy+(delta/2)));
         }
 
         if (x>800 || x<0) x=800;
@@ -89,18 +102,19 @@ public class MouseFollower extends Entity {
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
         {
-            System.out.println("new box!");
-            Main.fireProjectile(x, y);
+            projectiles.add(new Projectile((int)x, (int)y,projectileDirection));
         }
+
+        hitbox.setLocation((int)x, (int)y);
 
     }
 
     public void draw()
     {
-        x = (float) hitBox.getX();
-        y = (float) hitBox.getY();
-        float w = (float) hitBox.getWidth();
-        float h = (float) hitBox.getHeight();
+        x = (float) hitbox.getX();
+        y = (float) hitbox.getY();
+        float w = (float) hitbox.getWidth();
+        float h = (float) hitbox.getHeight();
 
         GL11.glColor3f(1, 1, 1);
 

@@ -4,6 +4,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Main
@@ -11,17 +12,19 @@ public class Main
     public static final int TARGET_FPS=100;
     public static final int SCR_WIDTH=800;
     public static final int SCR_HEIGHT=600;
-    private static LinkedList<Entity> projectiles;
+
+    private static LinkedList<Projectile> projectiles;
+    private static MouseFollower player;
+    private static Traverser target;
+
 
     public static void main(String[] args) throws LWJGLException
     {
         initGL(SCR_WIDTH, SCR_HEIGHT);
 
         projectiles = new LinkedList<>();
-
-        LinkedList<Entity> entities = new LinkedList<>();
-        entities.add(new MouseFollower(250, "res/breadedcat.png"));
-        entities.add(new Traverser(100, "res/mouse.png"));
+        player = new MouseFollower(250, "res/breadedcat.png", projectiles);
+        target = new Traverser(100, "res/mouse.png");
 
         long lastLoop = (Sys.getTime()*1000 / Sys.getTimerResolution());
 
@@ -33,41 +36,39 @@ public class Main
             long delta = now - lastLoop;
             lastLoop=now;
 
-            // UPDATE GAME OBJECTS
-            for (Entity e : entities)
-            {
-                e.update(delta/3);
-            }
-
-            for (Entity e : projectiles)
-            {
-                e.update(delta);
-            }
-
             GL11.glClear((GL11.GL_COLOR_BUFFER_BIT));
+            Projectile projectile;
+
+            // UPDATE GAME OBJECTS
+            player.update(delta);
+            target.update(delta);
+
+            Iterator<Projectile> iterator = projectiles.iterator();
+            while (iterator.hasNext())
+            {
+                projectile = iterator.next();
+                projectile.update(delta);
+
+                if (!projectile.isActive())
+                {
+                    iterator.remove();
+                }
+                else
+                {
+                    projectile.draw();
+                    target.testCollision(projectile);
+                }
+            }
 
             // DRAW OBJECTS
-            for (Entity e : entities)
-            {
-                e.draw();
-            }
-            for (Entity e : projectiles)
-            {
-                e.draw();
-            }
-
-
+            player.draw();
+            target.draw();
 
             // UPDATE DISPLAY
             Display.update();
         }
 
         Display.destroy();
-    }
-
-    public static void fireProjectile(float x, float y)
-    {
-        projectiles.add(new Box(x, y));
     }
 
     public static void initGL(int width, int height) throws LWJGLException
