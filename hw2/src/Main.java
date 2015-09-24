@@ -41,7 +41,7 @@ public class Main
 
             // UPDATE GAME OBJECTS
             player.update(delta);
-            target.update(delta);
+            target.update(delta/3);
 
             Iterator<Projectile> iterator = projectiles.iterator();
             while (iterator.hasNext())

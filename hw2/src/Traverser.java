@@ -1,4 +1,6 @@
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.*;
+import org.lwjgl.util.Rectangle;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
@@ -16,24 +18,19 @@ public class Traverser extends Entity {
     private float imageWidth;
     private float imageHeight;
 
-    float x=100;
-    float y=200;
-    float imageWidthPX;
-    float imageHeightPX;
     char direction = 'd';
 
     public Traverser(int width, String imgpath)
     {
+
         try
         {
             texture = TextureLoader.getTexture("jpg", ResourceLoader.getResourceAsStream(imgpath));
+            //these are ratios
             imageWidth = (float)texture.getImageWidth() / texture.getTextureWidth();
             imageHeight = (float)texture.getImageHeight() / texture.getTextureHeight();
 
-            imageWidthPX = width;
-            imageHeightPX = width * texture.getImageHeight() / texture.getImageWidth();
-
-            //hitbox = new Rectangle(0, 0, width, (width * texture.getImageHeight() / texture.getImageWidth()));
+            hitbox = new Rectangle(50, 0, texture.getImageWidth(), texture.getImageHeight());
         }
         catch (IOException e)
         {
@@ -56,13 +53,14 @@ public class Traverser extends Entity {
     {
         double xx = hitbox.getX();
         double yy = hitbox.getY();
-        //System.out.println(xx);
-        System.out.println(yy);
+        System.out.println(hitbox);
+        //System.out.println("y: " + yy);
+
 
         if (direction == 'r')
         {
             hitbox.setLocation((int)(xx+delta), (int)yy);
-            if (x>800-imageWidthPX)
+            if (xx>800-hitbox.getWidth())
             {
                 direction = 'u';
             }
@@ -70,7 +68,7 @@ public class Traverser extends Entity {
         else if (direction == 'l')
         {
             hitbox.setLocation((int)(xx-delta), (int)yy);
-            if (x<0)
+            if (xx<0)
             {
                 direction = 'd';
             }
@@ -78,7 +76,7 @@ public class Traverser extends Entity {
         else if (direction == 'd')
         {
             hitbox.setLocation((int)xx, (int)(yy+delta));
-            if (y>600-imageHeightPX)
+            if (yy>600-hitbox.getHeight())
             {
                 direction = 'r';
             }
@@ -86,7 +84,7 @@ public class Traverser extends Entity {
         else if (direction=='u')
         {
             hitbox.setLocation((int)xx, (int)(yy-delta));
-            if (y<0)
+            if (yy<0)
             {
                 direction = 'l';
             }
@@ -99,8 +97,8 @@ public class Traverser extends Entity {
 
         public void draw()
     {
-        x = (float) hitbox.getX();
-        y = (float) hitbox.getY();
+        float x =  hitbox.getX();
+        float y =  hitbox.getY();
         float w = (float) hitbox.getWidth();
         float h = (float) hitbox.getHeight();
 
