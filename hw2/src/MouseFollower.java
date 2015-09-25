@@ -26,7 +26,7 @@ public class MouseFollower extends Entity {
 
 
 
-    public MouseFollower(int width, String imgpath, LinkedList<Projectile> projectiles)
+    public MouseFollower(int shrinkFactor, String imgpath, LinkedList<Projectile> projectiles)
     {
         super(0,0,100,100);
         this.projectiles = projectiles;
@@ -35,8 +35,8 @@ public class MouseFollower extends Entity {
         try
         {
             texture = TextureLoader.getTexture("jpg", ResourceLoader.getResourceAsStream(imgpath));
-            imageWidth = (float)texture.getImageWidth() / texture.getTextureWidth();
-            imageHeight = (float)texture.getImageHeight() / texture.getTextureHeight();
+            imageWidth = (float)texture.getImageWidth() / texture.getTextureWidth()  ;
+            imageHeight = (float)texture.getImageHeight() / texture.getTextureHeight() ;
 
         }
         catch (java.io.IOException e)

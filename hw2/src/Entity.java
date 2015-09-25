@@ -1,5 +1,7 @@
 import org.lwjgl.util.Rectangle;
 
+import java.io.IOException;
+
 /**
  * Created by david on 8/24/15.
  */
@@ -8,15 +10,32 @@ public abstract class Entity {
 
     protected Rectangle hitbox;
     private boolean active;
+    private AudioManager aman;
 
-    public Entity() {
+    public Entity() throws IOException {
         hitbox = new Rectangle();
         active = true;
+        loadSound();
     }
 
-    public Entity(int x, int y, int w, int h) {
+    public Entity(int x, int y, int w, int h)  {
         hitbox = new Rectangle(x, y, w, h) ;
         active = true;
+        loadSound();
+    }
+
+    private void loadSound() {
+        aman = AudioManager.getInstance();
+        try
+        {
+            aman.loadSample("dsrxplod", "res/dsrxplod.wav");
+        }
+        catch (IOException e)
+        {
+            System.out.println(e);
+        }
+
+
     }
 
     public void init()
@@ -50,6 +69,7 @@ public abstract class Entity {
 
     public void onCollision(Entity other)
     {
+        aman.play("dsrxplod");
     }
 
     public boolean isActive()

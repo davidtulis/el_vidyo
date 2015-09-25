@@ -4,6 +4,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
+
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -18,13 +20,24 @@ public class Main
     private static Traverser target;
 
 
-    public static void main(String[] args) throws LWJGLException
+    public static void main(String[] args) throws LWJGLException, IOException
     {
         initGL(SCR_WIDTH, SCR_HEIGHT);
 
+        AudioManager aman = AudioManager.getInstance();
+        try
+        {
+            aman.loadLoop("song", "res/doom1.ogg");
+            aman.play("song");
+        }
+        catch (IOException e)
+        {
+            System.out.println(e);
+        }
+
         projectiles = new LinkedList<>();
         player = new MouseFollower(250, "res/breadedcat.png", projectiles);
-        target = new Traverser(100, "res/mouse.png");
+        target = new Traverser(3, "res/mouse.png");
 
         long lastLoop = (Sys.getTime()*1000 / Sys.getTimerResolution());
 

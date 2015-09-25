@@ -20,17 +20,16 @@ public class Traverser extends Entity {
 
     char direction = 'd';
 
-    public Traverser(int width, String imgpath)
+    public Traverser(int shrinkFactor, String imgpath) throws IOException
     {
-
         try
         {
             texture = TextureLoader.getTexture("jpg", ResourceLoader.getResourceAsStream(imgpath));
             //these are ratios
-            imageWidth = (float)texture.getImageWidth() / texture.getTextureWidth();
-            imageHeight = (float)texture.getImageHeight() / texture.getTextureHeight();
+            imageWidth = (float)texture.getImageWidth() / texture.getTextureWidth() ;
+            imageHeight = (float)texture.getImageHeight() / (texture.getTextureHeight() );
 
-            hitbox = new Rectangle(50, 0, texture.getImageWidth(), texture.getImageHeight());
+            hitbox = new Rectangle(0, 0, texture.getImageWidth()/shrinkFactor, texture.getImageHeight()/shrinkFactor);
         }
         catch (IOException e)
         {
@@ -53,9 +52,6 @@ public class Traverser extends Entity {
     {
         double xx = hitbox.getX();
         double yy = hitbox.getY();
-        System.out.println(hitbox);
-        //System.out.println("y: " + yy);
-
 
         if (direction == 'r')
         {
