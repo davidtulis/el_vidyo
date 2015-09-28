@@ -17,6 +17,8 @@ public class Traverser extends Entity {
 
     private float imageWidth;
     private float imageHeight;
+    AudioManager aman;
+
 
     char direction = 'd';
 
@@ -30,6 +32,8 @@ public class Traverser extends Entity {
             imageHeight = (float)texture.getImageHeight() / (texture.getTextureHeight() );
 
             hitbox = new Rectangle(0, 0, texture.getImageWidth()/shrinkFactor, texture.getImageHeight()/shrinkFactor);
+
+            aman = AudioManager.getInstance();
         }
         catch (IOException e)
         {
@@ -88,7 +92,17 @@ public class Traverser extends Entity {
     }
 
     public void onCollision(Entity other) {
-        System.out.println("The mouse has been hit");
+
+        try
+        {
+                aman.loadLoop("gunsound", "res/gunsound.ogg");
+                aman.play("gunsound");
+
+        }
+        catch (IOException e)
+        {
+            System.out.println(e);
+        }
     }
 
         public void draw()

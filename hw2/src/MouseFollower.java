@@ -97,8 +97,12 @@ public class MouseFollower extends Entity {
             hitbox.setLocation((int)xx, (int)(yy+(delta/2)));
         }
 
-        if (x>800 || x<0) x=800;
-        if (y>600 || y<0) y=600;
+        if (x>700) x=700;
+        if (x<0) x=0;
+        if (y>500) y=500;
+        if (y<0) y=0;
+
+        System.out.println("x: " + x + ",y: " + y);
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
         {
