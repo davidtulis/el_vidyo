@@ -95,9 +95,9 @@ public class Traverser extends Entity {
 
         try
         {
-                aman.loadLoop("gunsound", "res/gunsound.ogg");
-                aman.play("gunsound");
-
+            aman.loadSample("gunsound", "res/gunsound.ogg");
+            aman.play("gunsound");
+            //aman.destroy();
         }
         catch (IOException e)
         {

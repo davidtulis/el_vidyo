@@ -43,6 +43,8 @@ public class Main
 
         while (! Display.isCloseRequested())
         {
+            aman.update();
+
             Display.sync(TARGET_FPS);
 
             long now = (Sys.getTime()*1000 / Sys.getTimerResolution());

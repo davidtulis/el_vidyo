@@ -102,15 +102,12 @@ public class MouseFollower extends Entity {
         if (y>500) y=500;
         if (y<0) y=0;
 
-        System.out.println("x: " + x + ",y: " + y);
-
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
         {
             projectiles.add(new Projectile((int)x, (int)y,projectileDirection));
         }
 
         hitbox.setLocation((int)x, (int)y);
-
     }
 
     public void draw()
