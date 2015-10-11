@@ -2,6 +2,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.*;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
@@ -12,7 +13,7 @@ import java.util.LinkedList;
 /**
  * Created by david on 8/26/15.
  */
-public class MouseFollower extends Entity {
+public class Player extends Entity {
 
     private Texture texture;
     private LinkedList<Projectile> projectiles;
@@ -26,7 +27,7 @@ public class MouseFollower extends Entity {
 
 
 
-    public MouseFollower(int shrinkFactor, String imgpath, LinkedList<Projectile> projectiles)
+    public Player(int shrinkFactor, String imgpath, LinkedList<Projectile> projectiles)
     {
         super(0,0,100,100);
         this.projectiles = projectiles;
@@ -107,7 +108,7 @@ public class MouseFollower extends Entity {
             projectiles.add(new Projectile((int)x, (int)y,projectileDirection));
         }
 
-        hitbox.setLocation((int)x, (int)y);
+        hitbox.setLocation((int) x, (int) y);
     }
 
     public void draw()
@@ -140,4 +141,42 @@ public class MouseFollower extends Entity {
         GL11.glEnd();
 
     }
+
+    public void onCollision(Entity other)
+    {
+        if (other instanceof Wall)
+        {
+            org.lwjgl.util.Rectangle overlap = intersection(other);
+
+            //player coordinates
+            float x =hitbox.getX();
+            float y =hitbox.getY();
+
+            double overlapWidth = overlap.getWidth();
+            double overlapHeight = overlap.getHeight();
+
+            if (overlapHeight > 0)
+            {
+                System.out.println("Overlap height: " + overlapHeight);
+            }
+
+            if (overlapWidth > 0)
+            {
+                System.out.println("Overlap width: " + overlapWidth);
+            }
+
+            hitbox.setLocation((int)x,(int)y);
+        }
+    }
+
+    public float getX()
+    {
+        return x;
+    }
+
+    public float getY()
+    {
+        return y;
+    }
+
 }

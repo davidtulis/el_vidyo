@@ -1,90 +1,20 @@
 import org.lwjgl.LWJGLException;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-
-public class Main
-{
-    public static final int TARGET_FPS=100;
-    public static final int SCR_WIDTH=800;
-    public static final int SCR_HEIGHT=600;
-
-    private static LinkedList<Projectile> projectiles;
-    private static MouseFollower player;
-    private static Traverser target;
 
 
-    public static void main(String[] args) throws LWJGLException, IOException
-    {
-        initGL(SCR_WIDTH, SCR_HEIGHT);
+public class Main {
 
-        AudioManager aman = AudioManager.getInstance();
-        try
-        {
-            aman.loadLoop("song", "res/doom1.ogg");
-            aman.play("song");
-        }
-        catch (IOException e)
-        {
-            System.out.println(e);
-        }
+    public static void main(String[] args) throws LWJGLException, IOException {
 
-        projectiles = new LinkedList<>();
-        player = new MouseFollower(250, "res/breadedcat.png", projectiles);
-        target = new Traverser(3, "res/mouse.png");
+        initGL(800, 600);
+        new Game().go();
 
-        long lastLoop = (Sys.getTime()*1000 / Sys.getTimerResolution());
-
-        while (! Display.isCloseRequested())
-        {
-            aman.update();
-
-            Display.sync(TARGET_FPS);
-
-            long now = (Sys.getTime()*1000 / Sys.getTimerResolution());
-            long delta = now - lastLoop;
-            lastLoop=now;
-
-            GL11.glClear((GL11.GL_COLOR_BUFFER_BIT));
-            Projectile projectile;
-
-            // UPDATE GAME OBJECTS
-            player.update(delta);
-            target.update(delta/3);
-
-            Iterator<Projectile> iterator = projectiles.iterator();
-            while (iterator.hasNext())
-            {
-                projectile = iterator.next();
-                projectile.update(delta);
-
-                if (!projectile.isActive())
-                {
-                    iterator.remove();
-                }
-                else
-                {
-                    projectile.draw();
-                    target.testCollision(projectile);
-                }
-            }
-
-            // DRAW OBJECTS
-            player.draw();
-            target.draw();
-
-            // UPDATE DISPLAY
-            Display.update();
-        }
-
-        Display.destroy();
     }
+
 
     public static void initGL(int width, int height) throws LWJGLException
     {

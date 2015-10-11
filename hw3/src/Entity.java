@@ -28,14 +28,12 @@ public abstract class Entity {
         aman = AudioManager.getInstance();
         try
         {
-            aman.loadSample("dsrxplod", "res/dsrxplod.wav");
+            aman.loadSample("gunsound.ogg", "res/gunsound.ogg");
         }
         catch (IOException e)
         {
             System.out.println(e);
         }
-
-
     }
 
     public void init()
@@ -69,7 +67,13 @@ public abstract class Entity {
 
     public void onCollision(Entity other)
     {
-        aman.play("dsrxplod");
+
+    }
+
+    public Rectangle intersection(Entity other)
+    {
+        Rectangle rval = new Rectangle();
+        return hitbox.intersection(other.hitbox, rval);
     }
 
     public boolean isActive()
