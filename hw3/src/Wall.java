@@ -4,10 +4,13 @@ public class Wall extends Entity {
     
     public Wall(int x, int y, int width, int height)
     {
+
         super(x,y,width,height);
     }
 
     public void draw() {
+
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
         int x = hitbox.getX();
         int y = hitbox.getY();
@@ -22,9 +25,10 @@ public class Wall extends Entity {
         GL11.glVertex2f(x+w,y+h);
         GL11.glVertex2f(x,y+h);
 
-        GL11.glEnd();            
-
+        GL11.glEnd();
     }
 
-    public void onCollision(Entity other) {}
+    public void onCollision(Entity other) {
+
+    }
 }

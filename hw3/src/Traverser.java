@@ -1,11 +1,9 @@
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.*;
 import org.lwjgl.util.Rectangle;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**

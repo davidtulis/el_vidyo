@@ -19,13 +19,10 @@ public class Player extends Entity {
     private LinkedList<Projectile> projectiles;
     private int projectileDirection;
 
-
     float x=100;
     float y=200;
     private float imageWidth;
     private float imageHeight;
-
-
 
     public Player(int shrinkFactor, String imgpath, LinkedList<Projectile> projectiles)
     {
@@ -98,9 +95,9 @@ public class Player extends Entity {
             hitbox.setLocation((int)xx, (int)(yy+(delta/2)));
         }
 
-        if (x>700) x=700;
+        if (x>Display.getWidth()-100) x=Display.getWidth()-100;
         if (x<0) x=0;
-        if (y>500) y=500;
+        if (y>Display.getHeight()-100) y=Display.getHeight()-100;
         if (y<0) y=0;
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
@@ -155,17 +152,18 @@ public class Player extends Entity {
             double overlapWidth = overlap.getWidth();
             double overlapHeight = overlap.getHeight();
 
-            if (overlapHeight > 0)
+            if (overlapHeight > overlapWidth )
             {
-                System.out.println("Overlap height: " + overlapHeight);
+                //horizontal
+                x-=(float)overlapWidth;
+            }
+            else
+            {
+                //vertical
+                y-=(float)overlapHeight;
             }
 
-            if (overlapWidth > 0)
-            {
-                System.out.println("Overlap width: " + overlapWidth);
-            }
-
-            hitbox.setLocation((int)x,(int)y);
+            hitbox.setLocation((int) x, (int) y);
         }
     }
 

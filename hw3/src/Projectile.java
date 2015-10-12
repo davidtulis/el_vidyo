@@ -39,8 +39,6 @@ public class Projectile extends Entity {
         }
 
         hitbox.setLocation((int)x, (int)y);
-
-        
     }
     
     public void draw() {
@@ -62,5 +60,7 @@ public class Projectile extends Entity {
 
     }
 
-    
+    public void onCollision(Entity other) {
+        this.deactivate();
+    }
 }
