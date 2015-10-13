@@ -31,10 +31,10 @@ public class Game extends Scene {
         walls = new LinkedList<>();
         target = new Traverser(3, "res/mouse.png");
 
-        walls.add(new Wall(30, Display.getHeight() - 50, 80, 80));
+        walls.add(new Wall(30, Display.getHeight() - 175, 80, 80));
         walls.add(new Wall(300, Display.getHeight() - 175, 80, 80));
         walls.add(new Wall(500, Display.getHeight() - 250, 80, 80));
-        walls.add(new Wall(700, Display.getHeight() - 400, 80, 80));
+        walls.add(new Wall(700, Display.getHeight() - 200, 80, 80));
     }
 
     public Scene nextScene() { return null; }
