@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -27,11 +29,42 @@ public class Search {
         //list of nodes already evaluated
         List<Cell> closedSet = new ArrayList<>();
 
-
+        //g value is distance from current node to start node
+        //g value of start node is 0
+        start.setGValue(0);
+        start.setHValue(end);
+        start.setFValue(start.getGValue() + start.getHValue());
 
         while (openSet.size()!=0)
         {
+            Collections.sort(openSet, new Comparator<Cell>() {
+                public int compare(Cell c1, Cell c2) {
+                    return c1.getFValue() - c2.getFValue();
+                }
+            });
 
+            //cell with the lowest F value
+            Cell current = openSet.get(0);
+
+            if (current==end){
+                //reconstruct path to start
+                //end
+            }
+
+            openSet.remove(current);
+            closedSet.add(current);
+
+            List<Cell> neighboringCells = current.getNeighboringCells();
+
+            //neighboring cells, sorted by lowest F value
+            for (Cell c : neighboringCells)
+            {
+                if (closedSet.contains(c))
+                {
+                    continue;
+                }
+                int tentativeG = c.getGValue() +
+            }
         }
 
         //will return list of Cells to take
@@ -40,3 +73,4 @@ public class Search {
 
     }
 }
+;

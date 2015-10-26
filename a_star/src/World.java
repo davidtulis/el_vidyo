@@ -8,6 +8,15 @@ public class World {
 
     private Cell[][] grid;
     private int countw;
+
+    public int getCounth() {
+        return counth;
+    }
+
+    public int getCountw() {
+        return countw;
+    }
+
     private int counth;
 
     private boolean drawEdges;
@@ -43,11 +52,14 @@ public class World {
         int endX = rand.nextInt(countw);
         int endY = rand.nextInt(counth);
 
+        grid[startY][startX].setAsStart();
+        grid[endY][endX].setAsEnd();
+
         //create obstacles
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < Math.sqrt(counth*countw)*2; i++)
         {
-            int obstacle1X = rand.nextInt((10 - 1) + 1);
-            int obstacle1Y = rand.nextInt((5 - 1) + 1);
+            int obstacle1X = rand.nextInt(countw);
+            int obstacle1Y = rand.nextInt(counth);
 
             //cell is not occupied by the player so we set it as an obstacle
             if (grid[obstacle1Y][obstacle1X].isEmpty())
@@ -57,15 +69,13 @@ public class World {
             }
             else //try again and hope for the best
             {
-                obstacle1X = rand.nextInt((10 - 1) + 1);
-                obstacle1Y = rand.nextInt((5 - 1) + 1);
+                obstacle1X = rand.nextInt(countw);
+                obstacle1Y = rand.nextInt(counth);
                 grid[obstacle1Y][obstacle1X].setAsObstacle();
             }
         }
 
         Search searcher = new Search(grid, grid[startY][startX], grid[endY][endX]);
-        searcher.setStart(grid[startY][startX]);
-        searcher.setEnd(grid[endY][endX]);
         searcher.aStarSearch();
 
     }
@@ -110,5 +120,9 @@ public class World {
 
             }
         }
+    }
+
+    public Cell[][] getGrid() {
+        return grid;
     }
 }

@@ -1,8 +1,5 @@
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Random;
 
 public class MovementTest extends Scene {
 
@@ -11,7 +8,7 @@ public class MovementTest extends Scene {
 
     public MovementTest()
     {
-        w = new World(10, 5);
+        w = new World(10, 9);
     }
 
     public boolean drawFrame(float delta)
