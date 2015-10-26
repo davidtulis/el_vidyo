@@ -2,84 +2,77 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
+import java.util.Scanner;
 
 public class World {
 
-    private Entity[][] grid;
+    private Cell[][] grid;
     private int countw;
     private int counth;
 
     private boolean drawEdges;
 
-    public static class Cell
-    {
-        private int row;
-        private int col;
-        private World world;
-
-        public Cell(int row, int col, World w)
-        {
-            this.row = row;
-            this.col = col;
-            this.world = w;
-        }
-
-        public int getRow() { return row; }
-        public int getCol() { return col; }
-        
-    }
-
-
-    public World(int countw, int counth)
-    {
+    public World(int countw, int counth) {
         this.countw = countw;
         this.counth = counth;
-        grid = new Entity[counth][countw];
-        drawEdges = false;;
+        grid = new Cell[counth][countw];
+        for (int i = 0; i<counth; i++)
+        {
+            for (int j=0; j<countw; j++)
+            {
+                grid[i][j] = new Cell(i, j, this, "empty");
+            }
+        }
+        drawEdges = false;
+
+        Scanner a = new Scanner(System.in);
+        System.out.println("Enter x for 1st box");
+        //int x1 = a.nextInt();
+        System.out.println("Enter y for 1st box");
+        //int y1 = a.nextInt();
+        System.out.println("Enter x for 2nd box");
+        //int x2 = a.nextInt();
+        System.out.println("Enter y for 2nd box");
+        //int y2 = a.nextInt();
+
 
         Random rand = new Random();
+        //create two boxes to draw the path between
+        int startX = rand.nextInt(countw);
+        int startY = rand.nextInt(counth);
+        int endX = rand.nextInt(countw);
+        int endY = rand.nextInt(counth);
 
-        int box1X = rand.nextInt((10 - 1) + 1) ;
-        int box1Y = rand.nextInt((5 - 1) + 1) ;
+        //create obstacles
+        for (int i = 0; i < 8; i++)
+        {
+            int obstacle1X = rand.nextInt((10 - 1) + 1);
+            int obstacle1Y = rand.nextInt((5 - 1) + 1);
 
-        int box2X = rand.nextInt((10 - 1) + 1) ;
-        int box2Y = rand.nextInt((5 - 1) + 1) ;
+            //cell is not occupied by the player so we set it as an obstacle
+            if (grid[obstacle1Y][obstacle1X].isEmpty())
+            {
+                grid[obstacle1Y][obstacle1X].setAsObstacle();
 
-        System.out.printf("1x:%d 1y:%d 2x:%d 2y:%d\n", box1X, box1Y, box2X, box2Y);
+            }
+            else //try again and hope for the best
+            {
+                obstacle1X = rand.nextInt((10 - 1) + 1);
+                obstacle1Y = rand.nextInt((5 - 1) + 1);
+                grid[obstacle1Y][obstacle1X].setAsObstacle();
+            }
+        }
 
-        World.Cell c1 = this.cellAtCoord(box1X, box1Y);
-        World.Cell c2 = this.cellAtCoord(box2X, box2Y);
-        System.out.printf("%d, %d\n", c1.getCol(), c1.getRow());
-        System.out.printf("%d, %d\n", c2.getCol(), c2.getRow());
+        Search searcher = new Search(grid, grid[startY][startX], grid[endY][endX]);
+        searcher.setStart(grid[startY][startX]);
+        searcher.setEnd(grid[endY][endX]);
+        searcher.aStarSearch();
 
-        this.set(c1.getRow(), c1.getCol(), new Box());
-        this.set(c2.getRow(), c2.getCol(), new Box());
-
-
-
-    }
-
-
-    public void set(int r, int c, Entity e)
-    {
-        grid[r][c] = e;
     }
 
     public void setDrawEdges(boolean flag)
     {
         drawEdges = flag;
-    }
-
-    public Cell cellAtCoord(float x, float y)
-    {
-        float dx = Display.getWidth() / countw;
-        float dy = Display.getHeight() / counth;
-
-        int col = (int) (x);
-        int row = (int) (y);
-
-        return new Cell(row,col,this);
-
     }
 
     public void draw()
@@ -99,6 +92,7 @@ public class World {
 
                 if (drawEdges)
                 {
+                    GL11.glColor3f(0, 1, 1);
                     float x = c*dx;
                     float y = r*dy;
 
@@ -116,11 +110,5 @@ public class World {
 
             }
         }
-
-        
-        
     }
-    
-    
-    
 }

@@ -36,45 +36,4 @@ public abstract class Entity {
     {
         
     }
-
-
-    public boolean intersects(Entity other)
-    {
-        return hitbox.intersects(other.hitbox);
-    }
-
-    public Rectangle intersection(Entity other)
-    {
-        Rectangle rval = new Rectangle();
-        return hitbox.intersection(other.hitbox, rval);
-    }
-
-
-    public boolean testCollision(Entity other)
-    {
-        if (hitbox.intersects(other.hitbox)) 
-        {
-            onCollision(other);
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
-    }
-
-    public void onCollision(Entity other)
-    {
-    }
-
-    public boolean isActive()
-    {
-        return active;
-    }
-
-    protected void deactivate()
-    {
-        active = false;
-    }
-
 }
