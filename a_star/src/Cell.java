@@ -16,6 +16,12 @@ public class Cell extends Entity
     //shortest distance from start to cell
     private int GValue;
 
+    public Cell getCameFrom() {
+        return cameFrom;
+    }
+
+    private Cell cameFrom;
+
     public Cell(int row, int col, World w, String status)
     {
         this.row = row;
@@ -172,5 +178,9 @@ public class Cell extends Entity
 
     public int getFValue() {
         return FValue;
+    }
+
+    public void setCameFrom(Cell cameFrom) {
+        this.cameFrom = cameFrom;
     }
 }

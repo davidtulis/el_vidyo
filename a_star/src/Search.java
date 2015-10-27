@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by FATHER on 10/25/2015.
@@ -37,18 +34,18 @@ public class Search {
 
         while (openSet.size()!=0)
         {
-            Collections.sort(openSet, new Comparator<Cell>() {
-                public int compare(Cell c1, Cell c2) {
-                    return c1.getFValue() - c2.getFValue();
-                }
-            });
+            Collections.sort(openSet, (c1, c2) -> c1.getFValue() - c2.getFValue());
 
             //cell with the lowest F value
             Cell current = openSet.get(0);
 
             if (current==end){
-                //reconstruct path to start
-                //end
+                LinkedList<Cell> path = new LinkedList<>();
+                while (current!=start) {
+                    path.add(current);
+                    current = current.getCameFrom();
+                }
+                return path;
             }
 
             openSet.remove(current);
@@ -63,14 +60,24 @@ public class Search {
                 {
                     continue;
                 }
-                int tentativeG = c.getGValue() +
+                int tentativeG = current.getGValue();
+                if (!openSet.contains(c))
+                {
+                    openSet.add(c);
+                }
+                else if (tentativeG > c.getGValue())
+                {
+                    continue;
+                }
+
+                //at this point we have found the best path
+                c.setCameFrom(current);
+                c.setGValue(tentativeG);
+                c.setFValue(c.getGValue()+c.getFValue());
             }
         }
 
-        //will return list of Cells to take
-        //might want to consider returning a set of instructions to take from start to end, but this might be harder to draw
+        //if we reach this point, there is no path to the endpoint
         return null;
-
     }
 }
-;
