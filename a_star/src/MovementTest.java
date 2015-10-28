@@ -1,14 +1,14 @@
+//David Tulis
 import org.lwjgl.opengl.GL11;
-
 
 public class MovementTest extends Scene {
 
     private World w;
 
 
-    public MovementTest()
+    public MovementTest(String[] startCoords, String[] endCoords)
     {
-        w = new World(10, 9);
+        w = new World(10, 10, startCoords, endCoords);
     }
 
     public boolean drawFrame(float delta)
@@ -18,6 +18,4 @@ public class MovementTest extends Scene {
         w.draw();
         return true;
     }
-
-
 }

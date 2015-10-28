@@ -1,14 +1,11 @@
+//David Tulis
 import java.util.*;
 
-/**
- * Created by FATHER on 10/25/2015.
- */
 public class Search {
-
-    private Cell[][] grid;
 
     public Cell start;
     public Cell end;
+    private Cell[][] grid;
 
     public Search(Cell[][] grid, Cell start, Cell end) {
         this.start = start;
@@ -16,7 +13,7 @@ public class Search {
         this.grid = grid;
     }
 
-    public List<Cell> aStarSearch() {
+    public List<Cell> findPath() {
         //set of tentative notes yet to be evaluated
         List<Cell> openSet = new ArrayList<>();
 
@@ -32,16 +29,19 @@ public class Search {
         start.setHValue(end);
         start.setFValue(start.getGValue() + start.getHValue());
 
-        while (openSet.size()!=0)
-        {
-            Collections.sort(openSet, (c1, c2) -> c1.getFValue() - c2.getFValue());
+        while (openSet.size() != 0) {
+            Collections.sort(openSet, new Comparator<Cell>() {
+                public int compare(Cell c1, Cell c2) {
+                    return c1.getFValue() - c2.getFValue();
+                }
+            });
 
-            //cell with the lowest F value
+            //cell with the lowest F value will be the first cell
             Cell current = openSet.get(0);
 
-            if (current==end){
+            if (current == end) {
                 LinkedList<Cell> path = new LinkedList<>();
-                while (current!=start) {
+                while (current != start) {
                     path.add(current);
                     current = current.getCameFrom();
                 }
@@ -54,26 +54,23 @@ public class Search {
             List<Cell> neighboringCells = current.getNeighboringCells();
 
             //neighboring cells, sorted by lowest F value
-            for (Cell c : neighboringCells)
-            {
-                if (closedSet.contains(c))
-                {
+            for (Cell neighbor : neighboringCells) {
+                if (closedSet.contains(neighbor)) {//already evaluated this one
                     continue;
                 }
-                int tentativeG = current.getGValue();
-                if (!openSet.contains(c))
-                {
-                    openSet.add(c);
-                }
-                else if (tentativeG > c.getGValue())
-                {
+
+                int tentativeG = current.getGValue() + 1;
+                if (!openSet.contains(neighbor)) { //discover new node
+                    openSet.add(neighbor);
+                } else if (tentativeG >= neighbor.getGValue()) { //this is not the better path
                     continue;
                 }
 
                 //at this point we have found the best path
-                c.setCameFrom(current);
-                c.setGValue(tentativeG);
-                c.setFValue(c.getGValue()+c.getFValue());
+                neighbor.setCameFrom(current);
+                neighbor.setHValue(end);
+                neighbor.setGValue(tentativeG);
+                neighbor.setFValue(neighbor.getGValue() + neighbor.getHValue());
             }
         }
 

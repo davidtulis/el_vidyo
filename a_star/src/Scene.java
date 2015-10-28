@@ -1,3 +1,4 @@
+//David Tulis
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 

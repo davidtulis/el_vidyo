@@ -1,5 +1,5 @@
+//David Tulis
 import org.lwjgl.util.Rectangle;
-
 
 public abstract class Entity {
 

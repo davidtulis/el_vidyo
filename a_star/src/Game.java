@@ -1,16 +1,21 @@
+//David Tulis
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Scanner;
 
 public class Game {
 
     public static void main(String[] args) throws LWJGLException {
-
+        Scanner a = new Scanner(System.in);
+        System.out.println("Enter coordinates for start location in format x,y (numbers 1-10)");
+        String[] startCoords = a.nextLine().split(",");
+        System.out.println("Enter coordinates for end location in format x,y (numbers 1-10)");
+        String[] endCoords = a.nextLine().split(",");
         initGL(800, 600);
-        new MovementTest().go();
-
+        new MovementTest(startCoords, endCoords).go();
     }
 
 
@@ -20,6 +25,7 @@ public class Game {
         Display.setDisplayMode(new DisplayMode(width, height));
         Display.create();
         Display.setVSyncEnabled(true);
+        Display.isActive();
         
         // enable 2D textures
         GL11.glEnable(GL11.GL_TEXTURE_2D);              
