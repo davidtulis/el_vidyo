@@ -3,9 +3,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
 import org.lwjgl.util.vector.Vector2f;
 
-import java.time.LocalDateTime;
-import java.util.Calendar;
-
 public class Projectile extends Entity {
 
     private static final int WIDTH=10;
@@ -67,7 +64,9 @@ public class Projectile extends Entity {
     }
 
     public void onCollision(Entity other) {
-        System.out.println("collision");
-        this.deactivate();
+        if (other.getClass().equals(Wall.class))
+        {
+            this.deactivate();
+        }
     }
 }

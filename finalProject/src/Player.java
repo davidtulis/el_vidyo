@@ -17,11 +17,19 @@ public class Player extends Entity {
     private Texture texture;
     private LinkedList<Projectile> projectiles;
     private int projectileDirection;
+    private int ammo=30;
 
     float x=100;
     float y=200;
     private float imageWidth;
     private float imageHeight;
+    private boolean paused=false;
+    private boolean restarted=false;
+
+    public int checkAmmo()
+    {
+        return ammo;
+    }
 
     public Player(int shrinkFactor, String imgpath, LinkedList<Projectile> projectiles)
     {
@@ -55,58 +63,84 @@ public class Player extends Entity {
 
     public void update(float delta)
     {
-        double xx = hitbox.getX();
-        double yy = hitbox.getY();
+       if (!paused) {
+            double xx = hitbox.getX();
+            double yy = hitbox.getY();
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
-        {
-            x+=delta/2;
-            hitbox.setLocation((int) (xx + (delta / 2)), (int) yy);
-        }
+            if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+                x += delta / 2;
+                hitbox.setLocation((int) (xx + (delta / 2)), (int) yy);
+            }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
-        {
-            x-=delta/2;
-            hitbox.setLocation((int) (xx - (delta / 2)), (int) yy);
-        }
+            if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+                x -= delta / 2;
+                hitbox.setLocation((int) (xx - (delta / 2)), (int) yy);
+            }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_UP))
-        {
-            y-=delta/2;
-            hitbox.setLocation((int) xx, (int) (yy - (delta / 2)));
-        }
+            if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+                y -= delta / 2;
+                hitbox.setLocation((int) xx, (int) (yy - (delta / 2)));
+            }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
-        {
-            y+=delta/2;
-            hitbox.setLocation((int) xx, (int) (yy + (delta / 2)));
+            if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+                y += delta / 2;
+                hitbox.setLocation((int) xx, (int) (yy + (delta / 2)));
+            }
         }
 
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
-                if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-                    projectiles.add(new Projectile((int) x, (int) y, false, -1));
-                }
-                if (Keyboard.getEventKey() == Keyboard.KEY_D)
-                {
-                    projectiles.add(new Projectile((int) x, (int) y, false, 1));
-                }
+                if (!paused) {
+                    if (Keyboard.getEventKey() == Keyboard.KEY_A) {
+                        if (ammo > 0) {
+                            projectiles.add(new Projectile((int) x, (int) y, false, -1));
+                            ammo--;
+                        }
+                    }
+                    if (Keyboard.getEventKey() == Keyboard.KEY_D) {
+                        if (ammo > 0) {
 
-                if (Keyboard.getEventKey() == Keyboard.KEY_W)
-                {
-                    projectiles.add(new Projectile((int)x, (int)y,true,-1));
-                }
+                            projectiles.add(new Projectile((int) x, (int) y, false, 1));
+                            ammo--;
+                        }
 
-                if (Keyboard.getEventKey() == Keyboard.KEY_S)
-                {
-                    projectiles.add(new Projectile((int) x, (int) y, true, 1));
+                    }
+
+                    if (Keyboard.getEventKey() == Keyboard.KEY_W) {
+                        if (ammo > 0) {
+
+                            projectiles.add(new Projectile((int) x, (int) y, true, -1));
+                            ammo--;
+                        }
+
+                    }
+
+                    if (Keyboard.getEventKey() == Keyboard.KEY_S) {
+                        if (ammo > 0) {
+
+                            projectiles.add(new Projectile((int) x, (int) y, true, 1));
+                            ammo--;
+                        }
+
+                    }
+                    if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
+                        if (ammo >= 4) {
+                            projectiles.add(new Projectile((int) x, (int) y, false, -1));
+                            projectiles.add(new Projectile((int) x, (int) y, false, 1));
+                            projectiles.add(new Projectile((int) x, (int) y, true, -1));
+                            projectiles.add(new Projectile((int) x, (int) y, true, 1));
+                            ammo -= 4;
+                        }
+
+                    }
                 }
-                if (Keyboard.getEventKey()==Keyboard.KEY_SPACE)
+                if (Keyboard.getEventKey()==Keyboard.KEY_P)
                 {
-                    projectiles.add(new Projectile((int) x, (int) y, false, -1));
-                    projectiles.add(new Projectile((int) x, (int) y, false, 1));
-                    projectiles.add(new Projectile((int)x, (int)y,true,-1));
-                    projectiles.add(new Projectile((int) x, (int) y, true, 1));
+                    paused = !paused;
+                }
+                if (Keyboard.getEventKey()==Keyboard.KEY_N)
+                {
+                    restarted=true;
                 }
             }
         }
@@ -200,4 +234,11 @@ public class Player extends Entity {
         return y;
     }
 
+    public boolean getPaused() {
+        return paused;
+    }
+
+    public boolean getRestarted() {
+        return restarted;
+    }
 }

@@ -15,7 +15,12 @@ public class Traverser extends Entity {
 
     private float imageWidth;
     private float imageHeight;
-    public int score=0;
+    private int score=0;
+
+    public int getScore()
+    {
+        return score;
+    }
 
     char direction = 'd';
 
@@ -87,8 +92,12 @@ public class Traverser extends Entity {
     }
 
     public void onCollision(Entity other) {
-        score++;
-        System.out.printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nScore: %d", score);
+        if (other.getClass().equals(Projectile.class))
+        {
+            score++;
+            other.deactivate();
+            System.out.printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nScore: %d", score);
+        }
     }
 
     public void draw()

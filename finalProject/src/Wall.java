@@ -29,6 +29,10 @@ public class Wall extends Entity {
     }
 
     public void onCollision(Entity other) {
+        if (other.getClass().equals(Projectile.class))
+        {
+            other.deactivate();
+        }
 
     }
 }
