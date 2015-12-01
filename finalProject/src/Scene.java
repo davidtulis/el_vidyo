@@ -23,7 +23,6 @@ public abstract class Scene
     {
         long lastloop = (Sys.getTime()*1000 / Sys.getTimerResolution());
 
-
         boolean keepGoing = true;
         do
         {
@@ -42,8 +41,7 @@ public abstract class Scene
                 return false;
             }
 
-        } while (keepGoing && ! Display.isCloseRequested() || doExit);
-
+        } while (keepGoing);
 
         return true;
     }

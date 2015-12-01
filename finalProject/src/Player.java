@@ -36,6 +36,8 @@ public class Player extends Entity {
         super(0,0,100,100);
         this.projectiles = projectiles;
         this.projectileDirection = 1;
+        restarted=false;
+        paused=false;
 
         try
         {
@@ -222,6 +224,10 @@ public class Player extends Entity {
 
             hitbox.setLocation((int) x, (int) y);
         }
+        if (other instanceof Powerup)
+        {
+            //add ammo
+        }
     }
 
     public float getX()
@@ -240,5 +246,9 @@ public class Player extends Entity {
 
     public boolean getRestarted() {
         return restarted;
+    }
+
+    public void setRestarted(boolean restarted) {
+        this.restarted = restarted;
     }
 }

@@ -9,7 +9,6 @@ public class Wall extends Entity {
     }
 
     public void draw() {
-
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
         int x = hitbox.getX();

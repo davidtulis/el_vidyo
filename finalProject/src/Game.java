@@ -11,16 +11,22 @@ public class Game {
     public static void main(String[] args) throws LWJGLException, IOException {
 
         initGL(800, 600);
-        MovementTest g = new MovementTest();
+        Menu gameMenu = new Menu();
+        gameMenu.addItem("Video game 1", new MovementTest());
+        gameMenu.addSpecial("Exit", Menu.DO_EXIT);
 
-        while(g.go())
+        Scene currScene = gameMenu;
+
+        while ( currScene.go()  )
         {
-            g=g.nextScene();
-            if (g=null)
+            currScene = currScene.nextScene();
+
+            if (currScene == null)
             {
-                g = new Game();
+                currScene = gameMenu;
             }
 
+            System.out.println("Changing Scene: " + currScene);
         }
         Display.destroy();
     }

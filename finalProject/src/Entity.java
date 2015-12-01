@@ -11,7 +11,7 @@ public abstract class Entity {
     protected Rectangle hitbox;
     private boolean active;
 
-    public Entity() throws IOException {
+    public Entity() {
         hitbox = new Rectangle();
         active = true;
     }

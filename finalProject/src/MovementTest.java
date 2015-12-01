@@ -11,9 +11,11 @@ public class MovementTest extends Scene {
     private LinkedList<Wall> walls;
     private LinkedList<Projectile> projectiles;
     private Traverser target;
+    private LinkedList<Powerup> powerups;
     private int score=0;
     private int ammo=30;
     private int state=0;
+    private boolean powerupsAvailable=true;
     //0=OK
     //1=paused
     //2=needs to be restarted
@@ -22,8 +24,13 @@ public class MovementTest extends Scene {
 
     public MovementTest() throws IOException
     {
+        state=0;
         projectiles = new LinkedList<>();
         player = new Player(250, "res/breadedcat.png", projectiles);
+
+        player.setRestarted(false);
+        powerups = new LinkedList<>();
+
         walls = new LinkedList<>();
         target = new Traverser(3, "res/mouse.png");
 
@@ -50,6 +57,23 @@ public class MovementTest extends Scene {
 
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
+        if (player.checkAmmo()<10 && powerupsAvailable==true)
+        {
+            powerups.add(new Powerup("res/ammo.png", 220, 200, 60, 60));
+            powerupsAvailable=false;
+        }
+
+        for (Powerup powerup : powerups) {
+            if (state==0) {
+                powerup.update(delta);
+            }
+            powerup.draw();
+        }
+
+        for (Powerup powerup : powerups) {
+            player.testCollision(powerup);
+        }
+
         player.update(delta);
 
         for (Wall w : walls) {
@@ -69,6 +93,8 @@ public class MovementTest extends Scene {
             target.update(delta);
         }
         target.draw();
+
+
 
         //update and move projectiles
         Projectile projectile;
@@ -90,31 +116,10 @@ public class MovementTest extends Scene {
             }
         }
 
-
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
         GL11.glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
-
-        // draw the minimap
-        /*GL11.glViewport(Display.getWidth() - 200, Display.getHeight() - 200, 200, 200);
-
-        GL11.glColor3f(1, 1, 1);
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glVertex2f(0, 0);
-        GL11.glVertex2f(Display.getWidth(), 0);
-        GL11.glVertex2f(Display.getWidth(), Display.getHeight());
-        GL11.glVertex2f(0, Display.getHeight());
-        GL11.glEnd();
-
-        for (Wall w : walls)
-        {
-            w.draw();
-        }
-        player.draw();
-
-        target.update(delta / 10);
-        target.draw();*/
 
         //0=OK
         //1=paused
@@ -143,6 +148,8 @@ public class MovementTest extends Scene {
         if (player.getRestarted()==true)
         {
             state=2;
+            player.setRestarted(false);
+            return false;
         }
 
         return true;
