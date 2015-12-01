@@ -12,7 +12,9 @@ public class Game {
 
         initGL(800, 600);
         Menu gameMenu = new Menu();
-        gameMenu.addItem("Video game 1", new MovementTest());
+        MovementTest newgame = new MovementTest();
+        gameMenu.addItem("Video game 1", newgame);
+
         gameMenu.addSpecial("Exit", Menu.DO_EXIT);
 
         Scene currScene = gameMenu;
@@ -23,7 +25,13 @@ public class Game {
 
             if (currScene == null)
             {
-                currScene = gameMenu;
+
+                gameMenu = new Menu();
+                gameMenu.addItem("Video game 1", new MovementTest());
+                gameMenu.addSpecial("Exit", Menu.DO_EXIT);
+                currScene=gameMenu;
+                //resume previous game here
+                gameMenu.addItem("resume", MovementTest.current);
             }
 
             System.out.println("Changing Scene: " + currScene);

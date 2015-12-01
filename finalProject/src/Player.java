@@ -25,6 +25,7 @@ public class Player extends Entity {
     private float imageHeight;
     private boolean paused=false;
     private boolean restarted=false;
+    private boolean supershotEnabled=false;
 
     public int checkAmmo()
     {
@@ -96,44 +97,44 @@ public class Player extends Entity {
                     if (Keyboard.getEventKey() == Keyboard.KEY_A) {
                         if (ammo > 0) {
                             projectiles.add(new Projectile((int) x, (int) y, false, -1));
-                            ammo--;
+                            fire(1);
+
                         }
                     }
                     if (Keyboard.getEventKey() == Keyboard.KEY_D) {
                         if (ammo > 0) {
-
                             projectiles.add(new Projectile((int) x, (int) y, false, 1));
-                            ammo--;
+                            fire(1);
                         }
 
                     }
 
                     if (Keyboard.getEventKey() == Keyboard.KEY_W) {
                         if (ammo > 0) {
-
                             projectiles.add(new Projectile((int) x, (int) y, true, -1));
-                            ammo--;
+                            fire(1);
                         }
 
                     }
 
                     if (Keyboard.getEventKey() == Keyboard.KEY_S) {
                         if (ammo > 0) {
-
                             projectiles.add(new Projectile((int) x, (int) y, true, 1));
-                            ammo--;
+                            fire(1);
                         }
 
                     }
-                    if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
-                        if (ammo >= 4) {
-                            projectiles.add(new Projectile((int) x, (int) y, false, -1));
-                            projectiles.add(new Projectile((int) x, (int) y, false, 1));
-                            projectiles.add(new Projectile((int) x, (int) y, true, -1));
-                            projectiles.add(new Projectile((int) x, (int) y, true, 1));
-                            ammo -= 4;
-                        }
+                    if (supershotEnabled==true) {
+                        if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
+                            if (ammo >= 4) {
+                                projectiles.add(new Projectile((int) x, (int) y, false, -1));
+                                projectiles.add(new Projectile((int) x, (int) y, false, 1));
+                                projectiles.add(new Projectile((int) x, (int) y, true, -1));
+                                projectiles.add(new Projectile((int) x, (int) y, true, 1));
+                                fire(4);
+                            }
 
+                        }
                     }
                 }
                 if (Keyboard.getEventKey()==Keyboard.KEY_P)
@@ -153,6 +154,11 @@ public class Player extends Entity {
         if (y<0) y=0;
 
         hitbox.setLocation((int) x, (int) y);
+    }
+
+    private void fire(int i) {
+        ammo-=i;
+        System.out.printf("Ammo: %d\n", ammo);
     }
 
     public void draw()
@@ -226,7 +232,9 @@ public class Player extends Entity {
         }
         if (other instanceof Powerup)
         {
-            //add ammo
+            ammo+=30;
+            supershotEnabled=true;
+            System.out.println("You picked up more ammo and enabled the supershot! Press the spacebar to use the supershot");
         }
     }
 

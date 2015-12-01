@@ -16,6 +16,9 @@ public class MovementTest extends Scene {
     private int ammo=30;
     private int state=0;
     private boolean powerupsAvailable=true;
+
+    public static MovementTest current;
+
     //0=OK
     //1=paused
     //2=needs to be restarted
@@ -45,6 +48,8 @@ public class MovementTest extends Scene {
 
     public boolean drawFrame(float delta)
     {
+        current=this;
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
         // draw the main screen
@@ -70,8 +75,13 @@ public class MovementTest extends Scene {
             powerup.draw();
         }
 
-        for (Powerup powerup : powerups) {
-            player.testCollision(powerup);
+        for (int i=0; i<powerups.size(); i++)
+        {
+            if (player.testCollision(powerups.get(i)))
+            {
+                powerups.get(i).deactivate();
+                powerups.remove(i);
+            }
         }
 
         player.update(delta);
