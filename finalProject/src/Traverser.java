@@ -96,7 +96,6 @@ public class Traverser extends Entity {
         {
             score++;
             other.deactivate();
-            System.out.printf("Score: %d\n", score);
         }
     }
 

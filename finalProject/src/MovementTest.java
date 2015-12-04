@@ -1,9 +1,13 @@
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.TrueTypeFont;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import org.newdawn.slick.Color;
 
 public class MovementTest extends Scene {
 
@@ -18,6 +22,7 @@ public class MovementTest extends Scene {
     private boolean powerupsAvailable=true;
 
     public static MovementTest current;
+
 
     //0=OK
     //1=paused
@@ -39,7 +44,7 @@ public class MovementTest extends Scene {
 
         walls.add(new Wall(30, Display.getHeight() - 175, 80, 80));
         walls.add(new Wall(300, Display.getHeight() - 175, 80, 80));
-        walls.add(new Wall(500, Display.getHeight() - 250, 80, 80));
+        walls.add(new Wall(500, 20, 80, 80));
         walls.add(new Wall(700, Display.getHeight() - 200, 80, 80));
     }
 
@@ -100,7 +105,7 @@ public class MovementTest extends Scene {
         player.draw();
 
         if (state==0) {
-            target.update(delta);
+            target.update(delta/2);
         }
         target.draw();
 
@@ -131,19 +136,29 @@ public class MovementTest extends Scene {
         GL11.glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
+        TrueTypeFont menuFont = new TrueTypeFont(new Font("Times New Roman", Font.BOLD, 24), true);
+        menuFont.drawString(Display.getWidth() - 100, 30, "Score: " + target.getScore(), Color.red);
+        menuFont.drawString(Display.getWidth() - 250, 30, "Ammo: " + player.checkAmmo(), Color.red);
+
         //0=OK
         //1=paused
         //2=needs to be restarted
         //3=win
         //4=loss
 
-        if (player.checkAmmo()<0)
+        if (player.checkAmmo()<=0)
         {
             state=4;
+            player.setRestarted(false);
+
+            return false;
         }
-        if (target.getScore()>10)
+        if (target.getScore()>2)
         {
             state=3;
+            player.setRestarted(false);
+
+            return false;
         }
 
         if (player.getPaused()==true)
@@ -167,5 +182,9 @@ public class MovementTest extends Scene {
 
     public int getState() {
         return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }

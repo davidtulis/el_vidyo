@@ -2,8 +2,11 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.TrueTypeFont;
 
+import java.awt.*;
 import java.io.IOException;
+import org.newdawn.slick.Color;
 
 
 public class Game {
@@ -13,29 +16,50 @@ public class Game {
         initGL(800, 600);
         Menu gameMenu = new Menu();
         MovementTest newgame = new MovementTest();
-        gameMenu.addItem("Video game 1", newgame);
+        TrueTypeFont menuFont = new TrueTypeFont(new Font("Times New Roman", Font.BOLD, 24), true);
+        menuFont.drawString(Display.getWidth() - 100, 30, "Move with the arrow keys. Shoot with WASD.  ", Color.red);
+
+        gameMenu.addItem("Play Cattack", newgame);
 
         gameMenu.addSpecial("Exit", Menu.DO_EXIT);
 
         Scene currScene = gameMenu;
 
-        while ( currScene.go()  )
-        {
-            currScene = currScene.nextScene();
+            while (currScene.go()) {
+                currScene = currScene.nextScene();
 
-            if (currScene == null)
-            {
+                if (currScene == null && newgame.getState() != 3 && newgame.getState() != 4) {
+                    gameMenu = new Menu();
+                    gameMenu.addItem("Resume current game", MovementTest.current);
+                    gameMenu.addItem("Start new game", new MovementTest());
+                    gameMenu.addSpecial("Exit", Menu.DO_EXIT);
+                    currScene = gameMenu;
+                }
 
-                gameMenu = new Menu();
-                gameMenu.addItem("Video game 1", new MovementTest());
-                gameMenu.addSpecial("Exit", Menu.DO_EXIT);
-                currScene=gameMenu;
-                //resume previous game here
-                gameMenu.addItem("resume", MovementTest.current);
+                if (newgame.getState()==3)
+                {
+                    newgame.setState(0);
+
+                    gameMenu = new Menu();
+                    gameMenu.addItem("You won", new MovementTest());
+                    gameMenu.addItem("Play Cattack", new MovementTest());
+
+                    gameMenu.addSpecial("Exit", Menu.DO_EXIT);
+                    currScene = gameMenu;
+
+                }
+                if (newgame.getState()==4)
+                {
+                    newgame.setState(0);
+
+                    gameMenu = new Menu();
+                    gameMenu.addItem("You lose", new MovementTest());
+                    gameMenu.addItem("Play Cattack", new MovementTest());
+
+                    gameMenu.addSpecial("Exit", Menu.DO_EXIT);
+                    currScene = gameMenu;
+                }
             }
-
-            System.out.println("Changing Scene: " + currScene);
-        }
         Display.destroy();
     }
 

@@ -19,6 +19,8 @@ public class Powerup extends Entity{
         super(x, y, width, height);
         try
         {
+            GL11.glColor3f(0,0,0);
+
             texture = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream(imgpath));
             imageWidth = (float)texture.getImageWidth() / texture.getTextureWidth()  ;
             imageHeight = (float)texture.getImageHeight() / texture.getTextureHeight() ;
@@ -44,7 +46,7 @@ public class Powerup extends Entity{
     }
     public void draw()
     {
-
+        GL11.glColor3f(1,1,1);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
         int x = hitbox.getX();
@@ -52,13 +54,23 @@ public class Powerup extends Entity{
         int w = hitbox.getWidth();
         int h = hitbox.getHeight();
 
-        GL11.glColor3f(1, 0, 1);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
+
         GL11.glBegin(GL11.GL_QUADS);
 
-        GL11.glVertex2f(x,y);
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(x, y);
+
+        GL11.glTexCoord2f(imageWidth, 0);
         GL11.glVertex2f(x + w, y);
-        GL11.glVertex2f(x+w,y+h);
+
+        GL11.glTexCoord2f(imageWidth, imageHeight);
+        GL11.glVertex2f(x + w, y + h);
+
+        GL11.glTexCoord2f(0, imageHeight);
         GL11.glVertex2f(x, y + h);
+
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
         GL11.glEnd();
     }

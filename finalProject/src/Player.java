@@ -26,6 +26,7 @@ public class Player extends Entity {
     private boolean paused=false;
     private boolean restarted=false;
     private boolean supershotEnabled=false;
+    private boolean lose=false;
 
     public int checkAmmo()
     {
@@ -45,7 +46,6 @@ public class Player extends Entity {
             texture = TextureLoader.getTexture("jpg", ResourceLoader.getResourceAsStream(imgpath));
             imageWidth = (float)texture.getImageWidth() / texture.getTextureWidth()  ;
             imageHeight = (float)texture.getImageHeight() / texture.getTextureHeight() ;
-
         }
         catch (java.io.IOException e)
         {
@@ -158,7 +158,6 @@ public class Player extends Entity {
 
     private void fire(int i) {
         ammo-=i;
-        System.out.printf("Ammo: %d\n", ammo);
     }
 
     public void draw()

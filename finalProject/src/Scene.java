@@ -36,7 +36,7 @@ public abstract class Scene
             // UPDATE DISPLAY
             Display.update();
 
-            if (Display.isCloseRequested())
+            if (Display.isCloseRequested() || doExit)
             {
                 return false;
             }
